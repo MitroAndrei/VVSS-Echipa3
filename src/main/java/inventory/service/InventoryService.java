@@ -4,13 +4,13 @@ import inventory.model.InhousePart;
 import inventory.model.OutsourcedPart;
 import inventory.model.Part;
 import inventory.model.Product;
-import inventory.repository.InventoryRepository;
+import inventory.repository.FileInventory;
 import javafx.collections.ObservableList;
 
 public class InventoryService {
 
-    private InventoryRepository repo;
-    public InventoryService(InventoryRepository repo){
+    private FileInventory repo;
+    public InventoryService(FileInventory repo){
         this.repo =repo;
     }
 

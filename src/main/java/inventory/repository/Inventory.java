@@ -1,6 +1,8 @@
 
-package inventory.model;
+package inventory.repository;
 
+import inventory.model.Part;
+import inventory.model.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -41,16 +43,12 @@ public class Inventory {
      * @return 
      */
     public Product lookupProduct(String searchItem) {
-        boolean isFound = false;
         for(Product p: products) {
-            if(p.getName().contains(searchItem) || (p.getProductId()+"").equals(searchItem)) return p;
-            isFound = true;
+            if(p.getName().contains(searchItem) || (p.getProductId()+"").equals(searchItem)){
+                return p;
+            }
         }
-        if(isFound == false) {
-            Product product = new Product(0, null, 0.0, 0, 0, 0, null);
-            return product;
-        }
-        return null;
+        return new Product(0, null, 0.0, 0, 0, 0, null);
     }
     
     /**
@@ -59,7 +57,9 @@ public class Inventory {
      * @param product 
      */
     public void updateProduct(int index, Product product) {
-        products.set(index, product);
+        if(index>=0&&index<products.size()){
+            products.set(index, product);
+        }
     }
     
     /**
