@@ -2,6 +2,7 @@ package inventory;
 
 import inventory.controller.MainScreenController;
 import inventory.repository.FileInventory;
+import inventory.repository.Inventory;
 import inventory.service.InventoryService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +15,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FileInventory repo= new FileInventory();
+        //FileInventory repo= new FileInventory();
+        Inventory repo = new Inventory();
         InventoryService service = new InventoryService(repo);
         System.out.println(service.getAllProducts());
         System.out.println(service.getAllParts());

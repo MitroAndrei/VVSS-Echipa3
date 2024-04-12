@@ -6,12 +6,14 @@ import inventory.model.OutsourcedPart;
 import inventory.model.Part;
 import inventory.model.Product;
 import inventory.repository.FileInventory;
+import inventory.repository.IInventory;
 import javafx.collections.ObservableList;
 
 public class InventoryService {
 
-    private FileInventory repo;
-    public InventoryService(FileInventory repo){
+    //private FileInventory repo;
+    private IInventory repo;
+    public InventoryService(IInventory repo){
         this.repo =repo;
     }
 
@@ -38,7 +40,7 @@ public class InventoryService {
     }
 
     public ObservableList<Product> getAllProducts() {
-        return repo.getAllProducts();
+        return repo.getProducts();
     }
 
     public Part lookupPart(String search) {
@@ -69,7 +71,7 @@ public class InventoryService {
     }
 
     public void deleteProduct(Product product){
-        repo.deleteProduct(product);
+        repo.removeProduct(product);
     }
 
 }

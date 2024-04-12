@@ -11,7 +11,7 @@ import javafx.collections.ObservableList;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Inventory {
+public class Inventory implements IInventory {
 
     // Declare fields
     private ObservableList<Product> products;
@@ -33,6 +33,7 @@ public class Inventory {
      *
      * @param product
      */
+    @Override
     public void addProduct(Product product) {
         products.add(product);
     }
@@ -42,6 +43,7 @@ public class Inventory {
      *
      * @param product
      */
+    @Override
     public void removeProduct(Product product) {
         products.remove(product);
     }
@@ -52,6 +54,7 @@ public class Inventory {
      * @param searchItem
      * @return
      */
+    @Override
     public Product lookupProduct(String searchItem) {
         for (Product p : products) {
             if (p.getName().contains(searchItem) || (p.getProductId() + "").equals(searchItem)) {
@@ -67,6 +70,7 @@ public class Inventory {
      * @param index
      * @param product
      */
+    @Override
     public void updateProduct(int index, Product product) {
         if (index >= 0 && index < products.size()) {
             products.set(index, product);
@@ -78,10 +82,12 @@ public class Inventory {
      *
      * @return
      */
+    @Override
     public ObservableList<Product> getProducts() {
         return products;
     }
 
+    @Override
     public void setProducts(ObservableList<Product> list) {
         products = list;
     }
@@ -91,6 +97,7 @@ public class Inventory {
      *
      * @param part
      */
+    @Override
     public void addPart(Part part) {
         allParts.add(part);
     }
@@ -100,6 +107,7 @@ public class Inventory {
      *
      * @param part
      */
+    @Override
     public void deletePart(Part part) {
         allParts.remove(part);
     }
@@ -110,12 +118,14 @@ public class Inventory {
      * @param searchItem
      * @return
      */
+    @Override
     public Part lookupPart(String searchItem) {
         for (Part p : allParts) {
             if (p.getName().contains(searchItem) || (p.getPartId() + "").equals(searchItem)) return p;
         }
         return null;
     }
+    @Override
     public List<Part> lookupParts(String searchItem) {
         List<Part> parts = new ArrayList<>();
         if (searchItem.isEmpty()) {
@@ -145,6 +155,7 @@ public class Inventory {
      * @param index
      * @param part
      */
+    @Override
     public void updatePart(int index, Part part) {
         allParts.set(index, part);
     }
@@ -154,6 +165,7 @@ public class Inventory {
      *
      * @return
      */
+    @Override
     public ObservableList<Part> getAllParts() {
         return allParts;
     }
@@ -161,6 +173,7 @@ public class Inventory {
     /**
      * @param list
      */
+    @Override
     public void setAllParts(ObservableList<Part> list) {
         allParts = list;
     }
@@ -171,6 +184,7 @@ public class Inventory {
      *
      * @return
      */
+    @Override
     public int getAutoPartId() {
         autoPartId++;
         return autoPartId;
@@ -182,16 +196,19 @@ public class Inventory {
      *
      * @return
      */
+    @Override
     public int getAutoProductId() {
         autoProductId++;
         return autoProductId;
     }
 
 
+    @Override
     public void setAutoPartId(int id) {
         autoPartId = id;
     }
 
+    @Override
     public void setAutoProductId(int id) {
         autoProductId = id;
     }

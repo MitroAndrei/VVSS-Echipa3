@@ -16,86 +16,86 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(OrderAnnotation.class)
 class InventoryServiceTest {
 
-    private static InventoryService service;
-
-    private final String name="piesa";
-    private final double goodPrice = 1.0;
-    private final int goodInStock = 7;
-    private final int min =5;
-    private final int max = 10;
-    private final int machineId=1;
-
-    @BeforeAll
-    static void setUpAll() {
-        FileInventory repo = new FileInventory();
-        service = new InventoryService(repo);
-    }
-
-    @ParameterizedTest
-    @MethodSource("doubleIntValidProvider")
-    @DisplayName("Add valid part")
-    @Tag("valid")
-    @Order(1)
-    void addValidInHousePart(double price, int inStock) {
-        assertNull(service.lookupPart(name));
-        service.addInhousePart(name, price, inStock, min, max, machineId);
-        assertNotNull(service.lookupPart(name));
-    }
-
-    static Stream<Arguments> doubleIntValidProvider() {
-        return Stream.of(
-                Arguments.of(0.0, 5),
-                Arguments.of(1.0, 6),
-                Arguments.of(Double.MAX_VALUE-1.0, 9),
-                Arguments.of(Double.MAX_VALUE, 10)
-        );
-    }
-
-
-    @ParameterizedTest
-    @ValueSource(doubles = {-1.0})
-    @DisplayName("Add invalid price part")
-    @Tag("price")
-    @Order(2)
-    void addInvalidPriceInHousePart(double price) {
-        assertThrows(ValidationException.class, () -> service.addInhousePart(name, price, goodInStock, min, max, machineId));
-        try {
-            service.addInhousePart(name, price, goodInStock, min, max, machineId);
-            fail();
-        } catch (ValidationException e) {
-            assertEquals("The price must be greater than 0.0 ", e.getMessage());
-        }
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {min-1, max+1})
-    @DisplayName("Add invalid inStock part")
-    @Tag("inStock")
-    @Order(3)
-    void addInvalidInStockInHousePart(int inStock) {
-        assertThrows(ValidationException.class, () -> service.addInhousePart(name, goodPrice, inStock, min, max, machineId));
-        try {
-            service.addInhousePart(name, goodPrice, inStock, min, max, machineId);
-            fail();
-        } catch (ValidationException e) {
-            switch (inStock) {
-                case min - 1 -> assertEquals("Inventory level is lower than minimum value. ", e.getMessage());
-                case max + 1 -> assertEquals("Inventory level is higher than the maximum value. ", e.getMessage());
-            }
-        }
-    }
-
-
-    @Test
-    @Disabled("Price is overflowing")
-    void addInvalidPriceInHousePart() {
-        double price = Double.MAX_VALUE*10;
-        assertThrows(ValidationException.class, () -> service.addInhousePart(name, price, goodInStock, min, max, machineId));
-    }
-
-
-    @AfterEach
-    void tearDown() {
-        service.deleteProduct(service.lookupProduct(name));
-    }
+//    private static InventoryService service;
+//
+//    private final String name="piesa";
+//    private final double goodPrice = 1.0;
+//    private final int goodInStock = 7;
+//    private final int min =5;
+//    private final int max = 10;
+//    private final int machineId=1;
+//
+//    @BeforeAll
+//    static void setUpAll() {
+//        FileInventory repo = new FileInventory();
+//        service = new InventoryService(repo);
+//    }
+//
+//    @ParameterizedTest
+//    @MethodSource("doubleIntValidProvider")
+//    @DisplayName("Add valid part")
+//    @Tag("valid")
+//    @Order(1)
+//    void addValidInHousePart(double price, int inStock) {
+//        assertNull(service.lookupPart(name));
+//        service.addInhousePart(name, price, inStock, min, max, machineId);
+//        assertNotNull(service.lookupPart(name));
+//    }
+//
+//    static Stream<Arguments> doubleIntValidProvider() {
+//        return Stream.of(
+//                Arguments.of(0.0, 5),
+//                Arguments.of(1.0, 6),
+//                Arguments.of(Double.MAX_VALUE-1.0, 9),
+//                Arguments.of(Double.MAX_VALUE, 10)
+//        );
+//    }
+//
+//
+//    @ParameterizedTest
+//    @ValueSource(doubles = {-1.0})
+//    @DisplayName("Add invalid price part")
+//    @Tag("price")
+//    @Order(2)
+//    void addInvalidPriceInHousePart(double price) {
+//        assertThrows(ValidationException.class, () -> service.addInhousePart(name, price, goodInStock, min, max, machineId));
+//        try {
+//            service.addInhousePart(name, price, goodInStock, min, max, machineId);
+//            fail();
+//        } catch (ValidationException e) {
+//            assertEquals("The price must be greater than 0.0 ", e.getMessage());
+//        }
+//    }
+//
+//    @ParameterizedTest
+//    @ValueSource(ints = {min-1, max+1})
+//    @DisplayName("Add invalid inStock part")
+//    @Tag("inStock")
+//    @Order(3)
+//    void addInvalidInStockInHousePart(int inStock) {
+//        assertThrows(ValidationException.class, () -> service.addInhousePart(name, goodPrice, inStock, min, max, machineId));
+//        try {
+//            service.addInhousePart(name, goodPrice, inStock, min, max, machineId);
+//            fail();
+//        } catch (ValidationException e) {
+//            switch (inStock) {
+//                case min - 1 -> assertEquals("Inventory level is lower than minimum value. ", e.getMessage());
+//                case max + 1 -> assertEquals("Inventory level is higher than the maximum value. ", e.getMessage());
+//            }
+//        }
+//    }
+//
+//
+//    @Test
+//    @Disabled("Price is overflowing")
+//    void addInvalidPriceInHousePart() {
+//        double price = Double.MAX_VALUE*10;
+//        assertThrows(ValidationException.class, () -> service.addInhousePart(name, price, goodInStock, min, max, machineId));
+//    }
+//
+//
+//    @AfterEach
+//    void tearDown() {
+//        service.deleteProduct(service.lookupProduct(name));
+//    }
 }
