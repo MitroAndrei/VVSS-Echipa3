@@ -84,22 +84,9 @@
 
     </dependencies>
     <properties>
-        <maven.compiler.release>19</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
-    <build>
-        <plugins>
-            <!-- Example: Maven Compiler Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.13.0</version>
-                <configuration>
-                    <release>19</release>
-                </configuration>
-            </plugin>
-            <!-- Add other plugins as needed for your build -->
-        </plugins>
-    </build>
 </project>
