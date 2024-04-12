@@ -78,9 +78,10 @@ class InventoryServiceTest {
             service.addInhousePart(name, goodPrice, inStock, min, max, machineId);
             fail();
         } catch (ValidationException e) {
-            switch (inStock) {
-                case min - 1 -> assertEquals("Inventory level is lower than minimum value. ", e.getMessage());
-                case max + 1 -> assertEquals("Inventory level is higher than the maximum value. ", e.getMessage());
+            if (inStock == min - 1) {
+                assertEquals("Inventory level is lower than minimum value. ", e.getMessage());
+            } else if (inStock == max + 1) {
+                assertEquals("Inventory level is higher than the maximum value. ", e.getMessage());
             }
         }
     }
@@ -96,6 +97,6 @@ class InventoryServiceTest {
 
     @AfterEach
     void tearDown() {
-        service.deleteProduct(service.lookupProduct(name));
+        service.deletePart(service.lookupPart(name));
     }
 }
