@@ -24,7 +24,7 @@ class PartTest {
     void isInvalidPricedPart() {
         Part part = new InhousePart(1, "test", 10.0, 10, 1, 100, 1);
         String errorMsj = "";
-        assertEquals(part.isValidPart("test", 10.0, 10, 1, 100, errorMsj), "The price must be greater than 0.0 ");
+        assertEquals(part.isValidPart("test", -10.0, 10, 1, 100, errorMsj), "The price must be greater than 0.0 ");
     }
 
 }

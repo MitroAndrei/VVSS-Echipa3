@@ -1,13 +1,12 @@
 package inventory.service;
 
-import inventory.model.InhousePart;
-import inventory.model.Part;
 import inventory.repository.IInventory;
 import inventory.repository.InventoryStub;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class InventoryServiceTestWithFileInventoryStub {
     static private InventoryService service;

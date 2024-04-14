@@ -3,25 +3,25 @@ package inventory.repository;
 import inventory.errors.ValidationException;
 import inventory.model.InhousePart;
 import inventory.model.Part;
-import inventory.validators.IPartValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.times;
 
 class InventoryTestWithMock {
-
-    @Mock
-    private IPartValidator validator;
-
     @InjectMocks
     private Inventory repo;
+
+    private final String validName = "test1";
+    private final String invalidName = "";
+    private final double validPrice = 1.0;
+    private final int validStock = 7;
+    private final int validMin = 5;
+    private final int validMax = 10;
+    private final int validMachineId = 1;
 
     @BeforeEach
     public void setUp() {
@@ -30,44 +30,33 @@ class InventoryTestWithMock {
 
     @Test
     void testAddValidInHousePart() {
-        InhousePart part = new InhousePart(1, "test1", 1.0, 7, 5, 10, 1);
-        Mockito.doNothing().when(validator).validatePart(part);
-        repo.addPart(part);
-        Mockito.verify(validator, times(1)).validatePart(part);
+        InhousePart p = new InhousePart(1, validName, validPrice, validStock, validMin, validMax, validMachineId);
+        assertEquals(0, repo.getAllParts().size());
+        try (MockedStatic<Part> part = Mockito.mockStatic(Part.class)) {
+            part.when(() -> Part.isValidPart(validName, validPrice, validStock, validMin, validMax, ""))
+                    .thenReturn("");
+            repo.addPart(p);
+            part.verify(times(1), () -> Part.isValidPart(validName, validPrice, validStock, validMin, validMax, ""));
+        }
+        assertEquals(1, repo.getAllParts().size());
     }
 
     @Test
     void testAddInvalidInHousePart() {
-        InhousePart part = new InhousePart(1, "", 1.0, 7, 5, 10, 1);
-        Mockito.doThrow(ValidationException.class).when(validator).validatePart(part);
-        try {
-            repo.addPart(part);
-            fail("Part added");
-        } catch (ValidationException e) {
-            Mockito.verify(validator, times(1)).validatePart(part);
+        InhousePart p = new InhousePart(1, invalidName, validPrice, validStock, validMin, validMax, validMachineId);
+        assertEquals(0, repo.getAllParts().size());
+        try (MockedStatic<Part> part = Mockito.mockStatic(Part.class)) {
+            part.when(() -> Part.isValidPart(invalidName, validPrice, validStock, validMin, validMax, ""))
+                    .thenReturn("A name has not been entered. ");
+            try {
+                repo.addPart(p);
+                fail("Part added");
+            } catch (ValidationException e) {
+                assertEquals(0, repo.getAllParts().size());
+                assertEquals("A name has not been entered. ", e.getMessage());
+            }
+            part.verify(times(1), () -> Part.isValidPart(invalidName, validPrice, validStock, validMin, validMax, ""));
         }
     }
 
-    @Test
-    void testLookupValidInHousePart() {
-        InhousePart part = new InhousePart(1, "test1", 1.0, 7, 5, 10, 1);
-        Mockito.doNothing().when(validator).validateSearchString("test1");
-        Mockito.doNothing().when(validator).validatePart(part);
-        repo.addPart(part);
-        Part found = repo.lookupPart("test1");
-        Mockito.verify(validator, times(1)).validateSearchString("test1");
-        assertEquals(part, found);
-    }
-
-    @Test
-    void testLookupInvalidInHousePart() {
-        InhousePart part = new InhousePart(1, "test1", 1.0, 7, 5, 10, 1);
-        Mockito.doThrow(ValidationException.class).when(validator).validatePart(part);
-        try {
-            repo.lookupPart("");
-        } catch (ValidationException e) {
-            Mockito.verify(validator, times(1)).validatePart(part);
-            assertEquals("A name has not been entered. ", e.getMessage());
-        }
-    }
 }

@@ -11,18 +11,24 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 
-public class InvertoryServiceTestWithMock {
+public class InventoryServiceTestWithMock {
     @Mock
     private IInventory repo;
 
     @InjectMocks
     private InventoryService service;
+
+    private final String validName = "test1";
+    private final String invalidName = "";
+    private final double validPrice = 1.0;
+    private final int validStock = 7;
+    private final int validMin = 5;
+    private final int validMax = 10;
+    private final int validMachineId = 1;
 
     @BeforeEach
     public void setUp() {
@@ -32,17 +38,20 @@ public class InvertoryServiceTestWithMock {
     @Test
     void testAddValidInHousePart() {
         Mockito.doNothing().when(repo).addPart(Mockito.any());
-        service.addInhousePart("piesa", 1.0, 7, 5, 10, 1);
+        service.addInhousePart(validName, validPrice, validStock, validMin, validMax, validMachineId);
         Mockito.verify(repo, times(1)).addPart(Mockito.any());
+        Mockito.verify(repo,never()).getAllParts();
     }
 
     @Test
     void testAddInvalidInHousePart() {
         Mockito.doThrow(ValidationException.class).when(repo).addPart(Mockito.any());
         try {
-            service.addInhousePart("", 1.0, 7, 5, 10, 1);
+            service.addInhousePart(invalidName, validPrice, validStock, validMin, validMax, validMachineId);
+            fail("Part added");
         } catch (ValidationException e) {
-            Mockito.verify(repo, times(0)).addPart(Mockito.any());
+            Mockito.verify(repo, times(1)).addPart(Mockito.any());
+            Mockito.verify(repo,never()).getAllParts();
         }
     }
 

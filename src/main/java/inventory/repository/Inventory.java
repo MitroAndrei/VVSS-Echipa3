@@ -5,8 +5,6 @@ import inventory.errors.RepositoryException;
 import inventory.errors.ValidationException;
 import inventory.model.Part;
 import inventory.model.Product;
-import inventory.validators.IPartValidator;
-import inventory.validators.PartValidator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -19,10 +17,9 @@ public class Inventory implements IInventory {
     private ObservableList<Part> allParts;
     private int autoPartId;
     private int autoProductId;
-    private IPartValidator partValidator;
 
-    public Inventory(IPartValidator partValidator) {
-        this.partValidator = partValidator;
+
+    public Inventory() {
         this.products = FXCollections.observableArrayList();
         this.allParts = FXCollections.observableArrayList();
         this.autoProductId = 0;
@@ -102,7 +99,10 @@ public class Inventory implements IInventory {
      */
     @Override
     public void addPart(Part part) {
-        partValidator.validatePart(part);
+        String errorMessage = Part.isValidPart(part.getName(), part.getPrice(), part.getInStock(), part.getMin(), part.getMax(), "");
+        if(!"".equals(errorMessage)) {
+            throw new ValidationException(errorMessage);
+        }
         allParts.add(part);
     }
 
@@ -124,7 +124,6 @@ public class Inventory implements IInventory {
      */
     @Override
     public Part lookupPart(String searchItem) {
-        partValidator.validateSearchString(searchItem);
         for (Part p : allParts) {
             if (p.getName().contains(searchItem) || (p.getPartId() + "").equals(searchItem)) return p;
         }

@@ -4,7 +4,6 @@ import inventory.errors.RepositoryException;
 import inventory.errors.ValidationException;
 import inventory.model.InhousePart;
 import inventory.model.Part;
-import inventory.validators.PartValidator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,8 +21,7 @@ class InventoryTest {
 
     @BeforeEach
     void setUp() {
-        PartValidator validator = new PartValidator();
-        inventory = new Inventory(validator);
+        inventory = new Inventory();
     }
 
     @Test

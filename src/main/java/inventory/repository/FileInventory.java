@@ -2,7 +2,6 @@ package inventory.repository;
 
 
 import inventory.model.*;
-import inventory.validators.PartValidator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -13,8 +12,8 @@ public class FileInventory {
 
 	private static String filename = "data/items.txt";
 	private Inventory inventory;
-	public FileInventory(PartValidator partValidator){
-		this.inventory = new Inventory(partValidator);
+	public FileInventory(){
+		this.inventory = new Inventory();
 		readParts();
 		readProducts();
 	}

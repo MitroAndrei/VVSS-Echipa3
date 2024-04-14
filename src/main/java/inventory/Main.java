@@ -4,7 +4,6 @@ import inventory.controller.MainScreenController;
 import inventory.repository.FileInventory;
 import inventory.repository.Inventory;
 import inventory.service.InventoryService;
-import inventory.validators.PartValidator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,8 +16,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         //FileInventory repo= new FileInventory();
-        PartValidator validator = new PartValidator();
-        Inventory repo = new Inventory(validator);
+        Inventory repo = new Inventory();
         InventoryService service = new InventoryService(repo);
         System.out.println(service.getAllProducts());
         System.out.println(service.getAllParts());
